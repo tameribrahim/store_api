@@ -16,7 +16,7 @@ framework:
     router:
         resource: '%kernel.project_dir%/app/config/routing.yml'
         strict_requirements: ~
-    form: { enabled: false }
+    form: { enabled: true }
     csrf_protection: { enabled: false }
     validation: { enable_annotations: true }
     serializer: { enable_annotations: true }
@@ -82,6 +82,7 @@ nelmio_cors:
         '^/': ~
 
 api_platform:
+    enable_fos_user: true
     http_cache:
         invalidation:
             enabled: true

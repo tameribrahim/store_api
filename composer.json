@@ -23,6 +23,7 @@
         "api-platform/core": "^2.1",
         "doctrine/doctrine-bundle": "^1.6",
         "doctrine/orm": "^2.5",
+        "friendsofsymfony/user-bundle": "~2.0",
         "guzzlehttp/guzzle": "^6.0",
         "incenteev/composer-parameter-handler": "^2.0",
         "nelmio/cors-bundle": "^1.4",
