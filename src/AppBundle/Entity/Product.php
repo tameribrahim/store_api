@@ -7,6 +7,7 @@ use AppBundle\Entity\Category;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+use ApiPlatform\Core\Annotation\ApiSubresource;
 
 /**
  * @ORM\Entity
@@ -27,11 +28,14 @@ class Product
 
     /**
      * @ORM\Column(type="string", length=100)
+     * @Groups({"product"})
+     * @Assert\NotBlank
      */
     private $name;
 
     /**
      * @ORM\Column(type="decimal", scale=2)
+     * @Groups({"product"})
      * @Assert\NotBlank
      * @Assert\Range(min=0, minMessage="The price must be superior to 0.")
      */
@@ -39,11 +43,13 @@ class Product
 
     /**
      * @ORM\Column(type="string", length=20)
+     * @Groups({"product"})
      */
     private $sku;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"product-read"})
      * @Assert\Type(
      *     type="integer",
      *     message="The quantity {{ value }} is not a valid {{ type }}."
@@ -55,6 +61,8 @@ class Product
     /**
      * @ORM\ManyToOne(targetEntity="Category", inversedBy="products")
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id", onDelete="CASCADE")
+     * @Groups({"product"})
+     * @ApiSubresource
      */
     private $category;
 
@@ -63,6 +71,7 @@ class Product
      *
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(name="created_at",type="datetime")
+     * @Groups({"product-read"})
      */
     private $created;
 
@@ -71,6 +80,7 @@ class Product
      *
      * @Gedmo\Timestampable(on="update")
      * @ORM\Column(name="updated_at",type="datetime")
+     * @Groups({"product-read"})
      */
     private $updated;
 
@@ -180,5 +190,25 @@ class Product
         $this->category = $category;
 
         return $this;
+    }
+
+    /**
+     * Get $created
+     *
+     * @return  \DateTime
+     */
+    public function getCreated()
+    {
+        return $this->created;
+    }
+
+    /**
+     * Get $updated
+     *
+     * @return  \DateTime
+     */
+    public function getUpdated()
+    {
+        return $this->updated;
     }
 }
