@@ -7,11 +7,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 use AppBundle\Entity\Category;
 use AppBundle\Entity\Product;
 use AppBundle\Entity\User;
+use AppBundle\Importer\DBChecker;
 
 class ImportSeedsCommand extends ContainerAwareCommand
 {
     private $seeds_url = 'https://raw.githubusercontent.com/TalentNet/coding-challenges/master/data/seeds/electronic-catalog.json';
-    private $em;
 
     protected function configure()
     {
@@ -24,7 +24,8 @@ class ImportSeedsCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $em = $this->getContainer()->get('doctrine')->getManager();
+        $em         = $this->getContainer()->get('doctrine')->getManager();
+        $db_checker = $this->getContainer()->get(DBChecker::class);
 
         $arrContextOptions= [
             "ssl"=>[
@@ -35,10 +36,16 @@ class ImportSeedsCommand extends ContainerAwareCommand
         $seeds_arr = json_decode( file_get_contents($this->seeds_url, false, stream_context_create($arrContextOptions)), true);
         // save categories and products
         foreach ($seeds_arr['products'] as $productObj){
-            $category = new Category();
-            $category->setName($productObj['category']);
-            $em->persist($category);
-
+            // check if the category already exist
+            $isCategoryExist = $db_checker->checkAndGetObject('category', $productObj['category']);
+            if ($isCategoryExist){
+                $category = $isCategoryExist;
+            }
+            else{
+                $category = new Category();
+                $category->setName($productObj['category']);
+                $em->persist($category);
+            }
             $product = new Product();
             $product->setName($productObj['name']);
             $product->setCategory($category);
@@ -49,6 +56,8 @@ class ImportSeedsCommand extends ContainerAwareCommand
         }
         // save users
         foreach ($seeds_arr['users'] as $userObj){
+            $isCategoryExist = $db_checker->checkAndGetObject('user', $userObj['email']);
+            if ($isCategoryExist) continue;
             $user = new User();
             $user->setFullName($userObj['name']);
             $user->setEmail($userObj['email']);
