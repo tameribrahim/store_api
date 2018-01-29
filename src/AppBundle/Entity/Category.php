@@ -42,6 +42,7 @@ class Category
      *
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(name="created_at", type="datetime")
+     * @Groups({"category-read"})
      */
     private $created;
 
@@ -50,6 +51,7 @@ class Category
      *
      * @Gedmo\Timestampable(on="update")
      * @ORM\Column(name="updated_at",type="datetime")
+     * @Groups({"category-read"})
      */
     private $updated;
 
@@ -96,5 +98,25 @@ class Category
     {
         $product->category = null;
         $this->offers->removeElement($product);
+    }
+
+    /**
+     * Get $created
+     *
+     * @return  \DateTime
+     */
+    public function getCreated()
+    {
+        return $this->created;
+    }
+
+    /**
+     * Get $updated
+     *
+     * @return  \DateTime
+     */
+    public function getUpdated()
+    {
+        return $this->updated;
     }
 }
