@@ -64,7 +64,7 @@ RUN composer dump-autoload --optimize --classmap-authoritative --no-dev
 COPY docker/app/docker-entrypoint.sh /usr/local/bin/docker-app-entrypoint
 RUN chmod +x /usr/local/bin/docker-app-entrypoint
 
-RUN chmod -R 777 /srv/api-platform/var/cache /srv/api-platform/var/logs
+RUN chmod -R 777 /srv/api-platform/var/cache /srv/api-platform/var/logs /srv/api-platform/var/cache/dev/profiler
 
 ENTRYPOINT ["docker-app-entrypoint"]
 CMD ["php-fpm"]
