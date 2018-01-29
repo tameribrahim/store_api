@@ -7,6 +7,7 @@ use AppBundle\Entity\Category;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+use ApiPlatform\Core\Annotation\ApiSubresource;
 
 /**
  * @ORM\Entity
@@ -27,11 +28,13 @@ class Product
 
     /**
      * @ORM\Column(type="string", length=100)
+     * @Groups({"product-read"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="decimal", scale=2)
+     * @Groups({"product-read"})
      * @Assert\NotBlank
      * @Assert\Range(min=0, minMessage="The price must be superior to 0.")
      */
@@ -39,11 +42,13 @@ class Product
 
     /**
      * @ORM\Column(type="string", length=20)
+     * @Groups({"product-read"})
      */
     private $sku;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"product-read"})
      * @Assert\Type(
      *     type="integer",
      *     message="The quantity {{ value }} is not a valid {{ type }}."
@@ -55,6 +60,8 @@ class Product
     /**
      * @ORM\ManyToOne(targetEntity="Category", inversedBy="products")
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id", onDelete="CASCADE")
+     * @Groups({"product-read"})
+     * @ApiSubresource
      */
     private $category;
 

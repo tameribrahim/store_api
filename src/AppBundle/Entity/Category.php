@@ -27,7 +27,7 @@ class Category
 
     /**
      * @ORM\Column(type="string", length=100)
-     * @Groups({"category"})
+     * @Groups({"category", "product-read"})
      * @Assert\NotBlank
      */
     private $name;
