@@ -1,6 +1,6 @@
 <p align="center"><img src="https://api-platform.com/logo-250x250.png" alt="API Platform"></p>
 
-This repository is chanllenge to create a RESTful api for a local electronic store!
+This repository is a RESTful api for a local electronic store!
 
 Installation
 ------------
@@ -18,13 +18,16 @@ Follow these steps to start the application:
     $ docker-compose exec app openssl genrsa -out var/jwt/private.pem -aes256 4096
     $ docker-compose exec app openssl rsa -pubout -in var/jwt/private.pem -out var/jwt/public.pem
     ```
-* Create the database
+* Update the database schema
     ```bash
-    $ docker-compose exec app php bin/console app:import-seeds
     $ docker-compose exec app php bin/console doctrine:schema:update --force
     ```
 * Import the fake data
     ```bash
     $ docker-compose exec app php bin/console app:import-seeds
     ```
-*
+* Run behat tests
+    ```bash
+    $ docker-compose exec app php bin/console cache:clear --env=test
+    $ docker-compose exec app php vendor/bin/behat
+    ```
